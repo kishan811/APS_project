@@ -52,7 +52,16 @@ void printTree(node *h)
 //merging two heaps 
 struct node* simply_merging(struct node* H1, struct node* H2) 
 {
-    //cout<<"simply merging";
+	
+
+    // cout<<"\nin simply merging\n";
+    // cout<<"unmerged (H1): ";
+    //             printTree(H1);
+
+    // cout<<"unmerged (Hr): ";
+    //             printTree(H2);
+     
+    // cout<<endl;
 
 
     struct node* H = initialise_heap();
@@ -77,6 +86,10 @@ struct node* simply_merging(struct node* H1, struct node* H2)
         if (y->degree < z->degree) 
         {
             y = y->sibling;
+        }
+        else if(z->sibling && z->degree<z->sibling->degree && z->sibling->degree < y->degree)
+        {
+           z = z->sibling;	
         } 
         else if (y->degree == z->degree) 
         {
@@ -91,6 +104,16 @@ struct node* simply_merging(struct node* H1, struct node* H2)
             z = b;
         }
     }
+
+
+    
+     // cout<<"\nin simply merging\n";
+    cout<<"merged heap is (H1+Hr): ";
+                printTree(H);
+                cout<<endl;
+
+  
+
    
     return H;
 }
@@ -191,6 +214,7 @@ int display_root_elements(struct node* H)
     p = H;
     while (p != NULL) {
         printf("%d", p->n);
+        cout<<"("<<p->degree<<")";
         if (p->sibling != NULL)
             printf("-->");
         p = p->sibling;
@@ -220,7 +244,8 @@ struct node* extract_min_node(struct node* H1)
     struct node* x = H1;
     //struct node *Hr;
     struct node* p;
-  //  Hr = NULL;
+  
+    Hr = NULL;
     if (x == NULL) 
     {
         printf("\nnode not found");
@@ -244,9 +269,7 @@ struct node* extract_min_node(struct node* H1)
         p = p->sibling;
     }
     
-    ///
-  //  cout<<"min : "<<x->n<<"\n";
-
+  
     ///removing the extracred node from sibling
     ///and making next to extracted as sibling
     if (t == NULL && x->sibling == NULL)
@@ -268,33 +291,12 @@ struct node* extract_min_node(struct node* H1)
 
     }
 
+    
 
-    // vector<node *>v;
-    // struct node *temp=x->child;
-    // while(temp!=NULL)
-    // {
-    //     v.push_back(temp);
-    //     temp=temp->sibling;
-    // }
-    // reverse(v.begin(), v.end());
-  
-    // cout<<"all anath child : ";
-    // for(int i=0;i<v.size();i++)
-    // {
-    //     cout<<v[i]->n<<" ";
-    // }
-    // cout<<endl;
-
-    // for(int i=0;i<v.size();i++)
-    // {
-    //    v[i]->parent=NULL; 
-    //    H=insert(H, v[i]);
-    //    //cout<<;
-    // }
-
-
-    // Hr=x->child;
-
+     if(!H1)
+     {
+     	swap(H1,Hr);
+     }
 
      cout<<"extracted heap is (Hr): ";
                 printTree(Hr);
@@ -303,6 +305,8 @@ struct node* extract_min_node(struct node* H1)
      cout<<"extracted heap is (H1): ";
                 printTree(H1);
                 cout<<endl;
+
+
     
      H = union_of_heaps(H1, Hr);
 
@@ -381,11 +385,9 @@ void printHeap(struct node *H)
 { 
     while(H!=NULL)
     {
-       // while (it != _heap.end()) 
-        // { 
+      
             printTree(H); 
         
-        // }
 
         H=H->sibling; 
     }
@@ -404,12 +406,13 @@ int main() {
     for (i = 1; i <= n; i++) 
     {
         cin>>m;
+       // cout<<i<<" ";
         np = create_node(m);
         H = insert(H, np);
     }
 
     display_root_elements(H);
-    cout<<"cuurent heap is: ";
+    cout<<"\ncuurent heap is: ";
     printTree(H);
     cout<<endl;
     
@@ -436,11 +439,9 @@ int main() {
          break;
         case 2:
             do {
-                // printf("\nEXTRACTING THE MINIMUM KEY NODE");
                 p = extract_min_node(H);
                 if (p != NULL)
-                    cout<<"\n extracted min node is : "<<p->n;
-                // printf("\nNOW THE HEAP IS:\n");
+                    cout<<"\nextracted min node is : "<<p->n;
                 display_root_elements(H);
                 cout<<"cuurent heap is: ";
                 printTree(H);
