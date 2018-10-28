@@ -405,9 +405,9 @@ int main() {
     cout<<"enter elements :\n";
     for (i = 1; i <= n; i++) 
     {
-        cin>>m;
-       // cout<<i<<" ";
-        np = create_node(m);
+       // cin>>m;
+       cout<<i<<" ";
+        np = create_node(i);
         H = insert(H, np);
     }
 
@@ -477,7 +477,7 @@ int main() {
                 cout<<endl;
                 printf("\ndelete more(y/Y)\n");
 
-                fflush(stdin);
+                //fflush(stdin);
                 scanf("%c", &ch);
             } while (ch == 'y' || ch == 'Y');
             break;
