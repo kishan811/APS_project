@@ -35,6 +35,19 @@ struct node* initialise_heap()
     np = NULL;
     return np;
 }
+
+
+// print function for Binomial Tree 
+void printTree(node *h) 
+{ 
+    while (h) 
+    { 
+        cout << h->n << " "; 
+        printTree(h->child); 
+        h = h->sibling; 
+    }
+  //  cout<<endl; 
+} 
  
 //merging two heaps 
 struct node* simply_merging(struct node* H1, struct node* H2) 
@@ -185,6 +198,19 @@ int display_root_elements(struct node* H)
     printf("\n");
 }
  
+//reverting children in list once root deleted 
+void reverting_list(struct node* y) 
+{
+    if (y->sibling != NULL) {
+        reverting_list(y->sibling);
+        (y->sibling)->sibling = y;
+    } 
+    else 
+    {
+        Hr = y;
+    }
+}
+
 
 //extracting min node operation 
 struct node* extract_min_node(struct node* H1) 
@@ -192,9 +218,9 @@ struct node* extract_min_node(struct node* H1)
     int min;
     struct node* t = NULL;
     struct node* x = H1;
-    struct node *Hr;
+    //struct node *Hr;
     struct node* p;
-    Hr = NULL;
+  //  Hr = NULL;
     if (x == NULL) 
     {
         printf("\nnode not found");
@@ -235,58 +261,56 @@ struct node* extract_min_node(struct node* H1)
 
    
     
-    // if (x->child != NULL) 
-    // {
-    //     reverting_list(x->child);
-    //     (x->child)->sibling = NULL;
+    if (x->child != NULL) 
+    {
+        reverting_list(x->child);
+        (x->child)->sibling = NULL;
 
+    }
+
+
+    // vector<node *>v;
+    // struct node *temp=x->child;
+    // while(temp!=NULL)
+    // {
+    //     v.push_back(temp);
+    //     temp=temp->sibling;
+    // }
+    // reverse(v.begin(), v.end());
+  
+    // cout<<"all anath child : ";
+    // for(int i=0;i<v.size();i++)
+    // {
+    //     cout<<v[i]->n<<" ";
+    // }
+    // cout<<endl;
+
+    // for(int i=0;i<v.size();i++)
+    // {
+    //    v[i]->parent=NULL; 
+    //    H=insert(H, v[i]);
+    //    //cout<<;
     // }
 
 
-    vector<node *>v;
-    struct node *temp=x->child;
-    while(temp!=NULL)
-    {
-        v.push_back(temp);
-        temp=temp->sibling;
-    }
-    reverse(v.begin(), v.end());
-  
-    cout<<"all anath child : ";
-    for(int i=0;i<v.size();i++)
-    {
-        cout<<v[i]->n<<" ";
-    }
-    cout<<endl;
-
-    for(int i=0;i<v.size();i++)
-    {
-       v[i]->parent=NULL; 
-       H=insert(H, v[i]);
-       //cout<<;
-    }
-
-
     // Hr=x->child;
+
+
+     cout<<"extracted heap is (Hr): ";
+                printTree(Hr);
+                cout<<endl;
+
+     cout<<"extracted heap is (H1): ";
+                printTree(H1);
+                cout<<endl;
     
-    // H = union_of_heaps(H1, Hr);
+     H = union_of_heaps(H1, Hr);
 
     return x;
 }
  
 
-//reverting children in list once root deleted 
-void reverting_list(struct node* y) 
-{
-    if (y->sibling != NULL) {
-        reverting_list(y->sibling);
-        (y->sibling)->sibling = y;
-    } 
-    // else 
-    // {
-        Hr = y;
-    // }
-}
+
 
 //search operation 
 struct node* search_element(struct node* H, int k) 
@@ -350,17 +374,7 @@ int delete_key(struct node* H, int k)
 }
 
 
-// print function for Binomial Tree 
-void printTree(node *h) 
-{ 
-    while (h) 
-    { 
-        cout << h->n << " "; 
-        printTree(h->child); 
-        h = h->sibling; 
-    }
-  //  cout<<endl; 
-} 
+
   
 // print function for binomial heap 
 void printHeap(struct node *H) 
