@@ -1,8 +1,10 @@
 #include<stdio.h>
 #include<malloc.h>
+#include<time.h>
 
 #include<bits/stdc++.h>
-
+clock_t cstart, cend;
+ double cpu_time_used;
 using namespace std;
 
 
@@ -108,9 +110,9 @@ struct node* simply_merging(struct node* H1, struct node* H2)
 
     
      // cout<<"\nin simply merging\n";
-    cout<<"merged heap is (H1+Hr): ";
-                printTree(H);
-                cout<<endl;
+    //cout<<"merged heap is (H1+Hr): ";
+            //    printTree(H);
+            //    cout<<endl;
 
   
 
@@ -248,7 +250,7 @@ struct node* extract_min_node(struct node* H1)
     Hr = NULL;
     if (x == NULL) 
     {
-        printf("\nnode not found");
+        printf("\nNode not found");
         return x;
     }
 
@@ -298,13 +300,13 @@ struct node* extract_min_node(struct node* H1)
      	swap(H1,Hr);
      }
 
-     cout<<"extracted heap is (Hr): ";
-                printTree(Hr);
-                cout<<endl;
+     // cout<<"extracted heap is (Hr): ";
+     //            printTree(Hr);
+     //            cout<<endl;
 
-     cout<<"extracted heap is (H1): ";
-                printTree(H1);
-                cout<<endl;
+     // cout<<"extracted heap is (H1): ";
+     //            printTree(H1);
+     //            cout<<endl;
 
 
     
@@ -313,9 +315,6 @@ struct node* extract_min_node(struct node* H1)
     return x;
 }
  
-
-
-
 //search operation 
 struct node* search_element(struct node* H, int k) 
 {
@@ -343,7 +342,7 @@ int decrease_key(struct node* H, int i, int k)
     struct node* z;
     p = search_element(H, i);
     if (p == NULL) {
-        printf("\ninvalid choice\n");
+        // printf("\ninvalid choice\n");
         return 0;
     }
     if (k > p->n) {
@@ -360,7 +359,7 @@ int decrease_key(struct node* H, int i, int k)
         y = z;
         z = z->parent;
     }
-    printf("\nkey reduced!");
+    // printf("\nkey reduced!");
 }
  
 int delete_key(struct node* H, int k) 
@@ -374,11 +373,10 @@ int delete_key(struct node* H, int k)
     decrease_key(H, k, -1000);
     np = extract_min_node(H);
     if (np != NULL)
-        printf("\nnode deleted");
+    {
+        // printf("\nnode deleted");
+    }
 }
-
-
-
   
 // print function for binomial heap 
 void printHeap(struct node *H) 
@@ -394,45 +392,115 @@ void printHeap(struct node *H)
 } 
 
 
- 
-int main() {
+int main(int argc, char * argv[]) {
     int i, n, m, option,nkey;
     struct node* p;
     struct node* np;
     char ch;
-    cout<<"enter initial number of elements :";
-    cin>>n;
-    cout<<"enter elements :\n";
-    for (i = 1; i <= n; i++) 
-    {
-       // cin>>m;
-       cout<<i<<" ";
-        np = create_node(i);
-        H = insert(H, np);
-    }
+    ifstream inFile,outFile,Files;
+   int x;
+   string s;
+   cout<<"Enter Filename:-\n";
+   cin>>s;
+   // if (argc == 2) {
+        inFile.open(s);
+    // }
+   // inFile.open("samplerand.txt");
+    cout<<"\nEnter number of values to insert or search or delete from file:-\n";
+   int numberofvalue;
+   cin>>numberofvalue;
+   int mm=0;
+  
 
-    display_root_elements(H);
-    cout<<"\ncuurent heap is: ";
-    printTree(H);
-    cout<<endl;
-    
+cstart = clock();  
+while (inFile >> x) 
+{
+  if(mm==numberofvalue)
+  {
+    break;
+  }
+  np = create_node(x);
+  H = insert(H, np);
+  mm=mm+1;
+}
+cstart = clock()-cstart;
+double time_taken = ((double)cstart)/CLOCKS_PER_SEC; 
+printf("My function took %f seconds to insert! \n", time_taken);
+
+
+// Files.open(s);
+//  i=0;
+// cstart = clock(); 
+// mm=0; 
+// while (Files >> x) 
+// {
+//   if(mm==numberofvalue)
+//   {
+//     break;
+//   }
+//   search_element(H, x);
+//   mm=mm+1;
+//  // i++;
+// }
+// cstart = clock()-cstart;
+// time_taken = ((double)cstart)/CLOCKS_PER_SEC; 
+// printf("My function took %f seconds to search! \n", time_taken);
+
+
+outFile.open(s);
+
+ i=0;
+cstart = clock(); 
+mm=0; 
+while (outFile >> x) 
+{
+  if(mm==numberofvalue)
+  {
+    break;
+  }
+  // np = create_node(x);
+  delete_key(H, x);
+  //cout<<"element deleted"<<i;
+  mm=mm+1;
+ // i++;
+}
+cstart = clock()-cstart;
+time_taken = ((double)cstart)/CLOCKS_PER_SEC; 
+printf("My function took %f seconds to delete! \n", time_taken);
+
+    // cout<<"enter initial number of elements :";
+   // cin>>n;
+    //cout<<"enter elements :\n";
+    //for (i = 1; i <= n; i++) 
+    //{
+       // cin>>m;
+       //cout<<i<<" ";
+      
+    //}
+
+    // display_root_elements(H);
+    // cout<<"\nCurrent heap is: ";
+    // printTree(H);
+    // cout<<endl;
+
     do 
     {
-        cout<<"enter choice: \n";
-        cout<<"1)insert 2)extract min key 3)decrease key 4)delete 5)quit 6)print heap \n";
+        // printf("My function took %f seconds to execute! \n", time_taken);
+        cout<<"Enter choice: \n";
+        cout<<"1)Insert \n2)Extract min\n3)Decrease key \n4)Delete \n5)Quit \n6)Print heap \n";
         cin>>option;
         switch (option) {
         case 1:
             do {
-                cout<<"enter element:";
+                cout<<"Enter element:";
                 cin>>m;
                 p = create_node(m);
                 H = insert(H, p);
                 display_root_elements(H);
-                cout<<"cuurent heap is: ";
+                cout<<"Current heap is: ";
                 printTree(H);
                 cout<<endl;
-                cout<<"\ninsert more(y): \n";
+                cout<<"\nInsert more(y): \n";
                 // fflush(stdin);
                 cin>>ch;
             } while (ch == 'Y' || ch == 'y');
@@ -441,25 +509,25 @@ int main() {
             do {
                 p = extract_min_node(H);
                 if (p != NULL)
-                    cout<<"\nextracted min node is : "<<p->n;
+                    cout<<"\nExtracted min node is : "<<p->n;
                 display_root_elements(H);
-                cout<<"cuurent heap is: ";
+                cout<<"Current heap is: ";
                 printTree(H);
                 cout<<endl;
-                cout<<"\nextract more(y): \n";
+                cout<<"\nExtract more(y): \n";
                 cin>>ch;
             } while (ch == 'Y' || ch == 'y');
             break;
         case 3:
             do {
-                cout<<"enter old key : ";
+                cout<<"Enter old key : ";
                 cin>>m;
-                cout<<"enter new key : ";
+                cout<<"Enter new key : ";
                 cin>>nkey;
                 decrease_key(H, m, nkey);
-                cout<<"root elements :\n ";
+                cout<<"Root elements are :\n ";
                 display_root_elements(H);
-                cout<<"cuurent heap is: ";
+                cout<<"Current heap is: ";
                 printTree(H);
                 cout<<endl;
                 cout<<"\ndecrease key more(y): \n";
@@ -468,11 +536,11 @@ int main() {
             break;
         case 4:
             do {
-                cout<<"enter key : ";
+                cout<<"Enter key : ";
                 cin>>m;
                 delete_key(H, m);
                 display_root_elements(H);
-                cout<<"cuurent heap is: ";
+                cout<<"Current heap is: ";
                 printTree(H);
                 cout<<endl;
                 printf("\ndelete more(y/Y)\n");
@@ -482,15 +550,17 @@ int main() {
             } while (ch == 'y' || ch == 'Y');
             break;
         case 5:
-            printf("\nexited\n");
+            printf("\nExited\n");
             break;
         case 6:
-                cout<<"cuurent heap is: ";
+                cout<<"Current heap is: ";
                 printTree(H);
                 cout<<endl;
              break;
         default:
-            printf("\nwrong choice\n");
+            printf("\nWrong choice\n");
         }
     } while (option!= 5);
+
+
 }
